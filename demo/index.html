@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="da" style="font-size: 100%">
+<head>
+    <title>fcoo.dk - fcoo-maps-havnelods - Demo</title>
+    <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta http-equiv='x-dns-prefetch-control' content='on'>
+
+    <meta name='copyright' content='FCOO'>
+    <meta name='owner' content='FCOO'>
+
+  <link  href="bower_components.css" rel="stylesheet">    
+  <link  href="../src/fcoo-maps-havnelods.css" rel="stylesheet">    
+</head>
+
+<body>
+    <script>
+        window.fcoo = window.fcoo || {};
+        window.fcoo.DEMO_VERSION = true;
+        //OR window.fcoo.LOCAL_DATA = true;
+    </script>
+
+    <script src="bower_components.js"></script>
+    <script src="../src/0-facilities.js"></script>
+    <script src="../src/1-location.js"></script>
+    <script src="../src/2-location-dk.js"></script>
+    <script src="../src/3-location-gl.js"></script>
+    <script src="../src/4-location-bridge.js"></script>
+    <script src="../src/5-GeoJSON.js"></script>
+    <script src="../src/fcoo-maps-havnelods.js"></script>
+
+    <script>
+        window.fcoo.map.createApplication(
+            //options
+            {
+                applicationName: {da:'DA: fcoo-maps-havnelods', en:'EN: fcoo-maps-havnelods'},
+                leftMenu       : {isLayerMenu: true, width: 375},
+            },
+
+            //layerMenu
+            [ 
+                "HAVNELODS-HARBORS-DK",
+                "HAVNELODS-HARBORS-GL", 
+                "HAVNELODS-BRIDGES-DK",
+            ]
+
+        );
+
+        
+
+
+
+
+
+
+    </script>
+</body>
+</html>

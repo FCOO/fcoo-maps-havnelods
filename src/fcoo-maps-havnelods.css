@@ -1,0 +1,43 @@
+/***********************************************
+    fcoo-maps-havnelods.scss,
+
+    (c) 2021, FCOO
+
+    https://github.com/FCOO/fcoo-maps-havnelods
+    https://github.com/FCOO
+
+
+************************************************/
+.port_icon_adjust {
+  position: relative;
+  left: -1px; }
+
+.brigde_icon_adjust {
+  font-size: 0.6666666667em;
+  width: 1.5em !important;
+  position: relative;
+  top: -1px; }
+
+.fa-normal-dot {
+  position: relative;
+  font-size: calc(10em/10);
+  left: calc(10em/10);
+  top: calc(10em/10); }
+
+.fa-small-dot {
+  position: relative;
+  font-size: .4em;
+  left: -.75em;
+  top: -.5em; }
+
+.fa-normal-square {
+  position: relative;
+  font-size: 7px;
+  left: -2.5px;
+  top: -2px; }
+
+.fa-small-square {
+  position: relative;
+  font-size: 6px;
+  left: -3px;
+  top: -2px; }
