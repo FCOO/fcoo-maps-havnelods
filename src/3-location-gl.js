@@ -2,8 +2,6 @@
 location-GL.js,
 
 ****************************************************************************/
-window.niels = 0;
-
 (function ($, L, i18next, moment, window/*, document, undefined*/) {
 	"use strict";
 
@@ -44,46 +42,15 @@ window.niels = 0;
             return this.options.HAVNEKATEGORI;
         },
 
-        /***********************************
-        getIcon
-        ***********************************/
-        getIcon: function(){
-            var type = this.getType();
-            if (type == '1')
-                return L.bsMarkerAsIcon( this.getMarkerOptions() );
-            else
-                return [['far fa-square-full', 'fas fa-square-full fa-lbm-color-' + this.colorName + ' ' + (type == '2' ? 'fa-normal-square' : 'fa-small-square')]];
-        },
-
-        /***********************************
-        markerOptions
-        ***********************************/
-        markerOptions: function(){
-            var options = {},
-                type    = this.getType();
-
-            if (type == '1')
-                options = {
-                    colorName      : this.colorName,
-                    borderColorName: 'black'
-                };
-            else
-                options = {
-                    innerIconClass : 'fas fa-square-full',
-                    scaleInner     : type == '2' ? 130 : null,
-
-                    colorName      : 'white',
-                    borderColorName: 'black',
-                    iconColorName  : this.colorName,
-                };
-
-            options = $.extend(true, {}, options, {
-                round       : false,
-                thinBorder  : true,
-                noBorder    : false
-            });
-
-            return options;
+        /*********************************************
+        getSVGType
+        1: Full square
+        2: Inner dot
+        3: Small inner dot
+        4: Full square and inner dot (= 1 and 2)
+        *********************************************/
+        getSVGType: function(){
+            return this.getType();
         }
     });
 

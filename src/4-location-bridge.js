@@ -2,8 +2,6 @@
 location-Bridge.js,
 
 ****************************************************************************/
-window.niels = 0;
-
 (function ($, L, i18next, moment, window/*, document, undefined*/) {
 	"use strict";
 
@@ -72,7 +70,7 @@ window.niels = 0;
         getIcon
         ***********************************/
         getIcon: function(){
-            return 'fai fai-bridge6';
+            return 'fai fai-bridge6 brigde-icon-adjust-marker';
         },
 
         /***********************************
@@ -80,16 +78,37 @@ window.niels = 0;
         ***********************************/
         markerOptions: function(){
             return {
-                iconClass : this.getIcon(),
+                iconClass    : this.getIcon(),
                 scaleInner   : 180,
                 colorName    : 'white',
                 iconColorName: 'black',
-
-                round     : false,
-                thinBorder: true,
-                noBorder  : false
+                svg          : false,   //<-- No SVG for now
             };
+        },
+
+
+        /***********************************
+        createSVG
+        ***********************************/
+/*
+        createSVG: function(draw, dim, borderColor, backgroundColor, iconColor, marker){
+
+
+            draw
+//                .attr({'shape-rendering': "crispEdges"})
+
+                .polyline([
+                    1,1,
+                    4,5,
+                    8,5,
+                   11,1
+                ])
+                .fill('none')
+                .stroke({ color: 'red', width: 2 })
+
         }
+*/
+
     });
 
 }(jQuery, L, this.i18next, this.moment, this, document));

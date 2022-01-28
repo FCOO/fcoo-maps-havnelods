@@ -77,20 +77,7 @@ location.js,
 
 	window.fcoo = window.fcoo || {};
     var ns = window.fcoo = window.fcoo || {},
-        nsHL = ns.Havnelods = ns.Havnelods || {},
-
-        //Common options for marker
-        bsMarkerOptions = {
-            size     : 'small',
-
-            markerClassName : 'overflow-hidden',
-
-            transparent             : true,
-            hover                   : true,
-            shadowWhenPopupOpen     : true,
-            tooltipHideWhenPopupOpen: true
-        };
-
+        nsHL = ns.Havnelods = ns.Havnelods || {};
 
 //TEST window.plans = [0,0,0];
 //TEST window.photos = [0,0,0];
@@ -208,7 +195,7 @@ location.js,
         getIcon - Is set for each group (DK, GL, Bridge)
         *********************************************/
         getIcon: function(){
-            return L.bsMarkerAsIcon( this.markerOptions() );
+            return [['fas fa-square fa-lbm-color-' + this.colorName, 'far fa-square']];
         },
 
         /*********************************************
@@ -221,15 +208,68 @@ location.js,
         getMarkerOptions
         *********************************************/
         getMarkerOptions: function(){
-            return  $.extend(true, {
-                            tooltip   : this.header,
-                            pane      : this.parent.options.markerPane,
-                            shadowPane: this.parent.options.shadowPane,
-                        },
-                        bsMarkerOptions,
-                        this.markerOptions()
-                    );
+            return  $.extend(true,
+                {
+                    //Common options for marker
+                    size     : 'small',
+
+                    colorName      : (this.getSVGType() == '1') || (this.getSVGType() == '4') ? this.colorName : 'white',
+                    borderColorName: 'black',
+                    iconColorName  : this.colorName,
+
+                    thinBorder       : true,
+                    individualContent: true,
+
+                    transparent             : true,
+                    hover                   : true,
+                    shadowWhenPopupOpen     : true,
+                    tooltipHideWhenPopupOpen: true,
+
+                    svg     : this.createSVG,
+                    _this   : this,
+
+
+                    tooltip   : this.header,
+                    pane      : this.parent.options.markerPane,
+                    shadowPane: this.parent.options.shadowPane,
+                },
+                this.markerOptions()
+            );
         },
+
+        /*********************************************
+        getSVGType
+        Used for harbor-dk and harbor-fl: Return
+        1: Full square
+        2: Inner dot
+        3: Small inner dot
+        4: Full square and inner dot (= 1 and 2)
+        *********************************************/
+        getSVGType: function(){
+            return '1';
+        },
+
+        /*********************************************
+        createSVG
+        *********************************************/
+        createSVG: function(draw, dim, borderColor, backgroundColor, iconColor, marker){
+            var type     = '' + marker.options._this.getSVGType(),
+                dim2     = Math.floor( dim / 2),
+                dim3     = Math.floor( dim / 3),
+                rect_dim = type == '3' ? 1 * dim3 : 2 * dim3;
+
+            draw
+                .attr({'shape-rendering': "crispEdges"})
+                .rect(rect_dim+1, rect_dim+1)
+                    .move(dim2 - rect_dim/2, dim2 - rect_dim/2)
+                    .stroke({
+                        width: 1,
+                        color: type == '1' ? 'none' : 'black'
+                    })
+                    .fill(iconColor);
+        },
+
+
 
         /*****************************************
         _photoPlanUrl
@@ -268,7 +308,7 @@ location.js,
         createMarker: function(){
             var this_show = $.proxy(this.showPdf, this);
 
-            return L.bsMarkerCircle( this.latLng, this.getMarkerOptions() )
+            return L.bsMarkerSimpleSquare( this.latLng, this.getMarkerOptions() )
                         .bindPopup({
 //HER                            flexWidth: true,
                             fixable : true,
@@ -352,8 +392,6 @@ location.js,
 location-DK.js,
 
 ****************************************************************************/
-window.niels = 0;
-
 (function ($, L, i18next, moment, window/*, document, undefined*/) {
 	"use strict";
 
@@ -397,50 +435,19 @@ window.niels = 0;
             };
         },
 
-        /***********************************
-        getIcon
-        ***********************************/
-        getIcon: function(){
-            var type = this.getType(),
-                iconList = ['fal fa-square-full'];
-
-            if (type.isCommertial)
-                iconList.push('fas fa-square-full fa-lbm-color-'+this.colorName);
-
-            if (type.isMarina || type.isNeither)
-                iconList.push(
-                    (type.isCommertial ? 'far fa-square-full fa-lbm-color-white' : 'fas fa-square-full fa-lbm-color-'+this.colorName) +
-                    ' ' +
-                    (type.isNeither ? 'fa-small-square' : 'fa-normal-square')
-                );
-            iconList.push('fal fa-square-full');
-
-            return [iconList];
-        },
-
-        /***********************************
-        markerOptions
-        ***********************************/
-        markerOptions: function(){
+        /*********************************************
+        getSVGType
+        1: Full square
+        2: Inner dot
+        3: Small inner dot
+        4: Full square and inner dot (= 1 and 2)
+        *********************************************/
+        getSVGType: function(){
             var type = this.getType();
-            var options = {
-                    colorName:  type.isCommertial ? this.colorName : 'white',
-                };
-
-            if (type.isMarina || type.isNeither){
-                options.scaleInner     = type.isNeither ? null : 130;
-                options.innerIconClass = type.isBoth ? 'far fa-square-full' : 'fas fa-square-full';
-                options.iconColorName  = type.isBoth ? 'white' : this.colorName;
-            }
-
-            options = $.extend(true, {}, options, {
-                borderColorName : 'black',
-                round           : false,
-                thinBorder      : true,
-                noBorder        : false
-            });
-
-            return options;
+            if (type.isBoth) return '4';
+            if (type.isNeither) return '3';
+            if (type.isMarina) return '2';
+            return '1';
         }
     });
 
@@ -451,8 +458,6 @@ window.niels = 0;
 location-GL.js,
 
 ****************************************************************************/
-window.niels = 0;
-
 (function ($, L, i18next, moment, window/*, document, undefined*/) {
 	"use strict";
 
@@ -493,46 +498,15 @@ window.niels = 0;
             return this.options.HAVNEKATEGORI;
         },
 
-        /***********************************
-        getIcon
-        ***********************************/
-        getIcon: function(){
-            var type = this.getType();
-            if (type == '1')
-                return L.bsMarkerAsIcon( this.getMarkerOptions() );
-            else
-                return [['far fa-square-full', 'fas fa-square-full fa-lbm-color-' + this.colorName + ' ' + (type == '2' ? 'fa-normal-square' : 'fa-small-square')]];
-        },
-
-        /***********************************
-        markerOptions
-        ***********************************/
-        markerOptions: function(){
-            var options = {},
-                type    = this.getType();
-
-            if (type == '1')
-                options = {
-                    colorName      : this.colorName,
-                    borderColorName: 'black'
-                };
-            else
-                options = {
-                    innerIconClass : 'fas fa-square-full',
-                    scaleInner     : type == '2' ? 130 : null,
-
-                    colorName      : 'white',
-                    borderColorName: 'black',
-                    iconColorName  : this.colorName,
-                };
-
-            options = $.extend(true, {}, options, {
-                round       : false,
-                thinBorder  : true,
-                noBorder    : false
-            });
-
-            return options;
+        /*********************************************
+        getSVGType
+        1: Full square
+        2: Inner dot
+        3: Small inner dot
+        4: Full square and inner dot (= 1 and 2)
+        *********************************************/
+        getSVGType: function(){
+            return this.getType();
         }
     });
 
@@ -547,8 +521,6 @@ window.niels = 0;
 location-Bridge.js,
 
 ****************************************************************************/
-window.niels = 0;
-
 (function ($, L, i18next, moment, window/*, document, undefined*/) {
 	"use strict";
 
@@ -617,7 +589,7 @@ window.niels = 0;
         getIcon
         ***********************************/
         getIcon: function(){
-            return 'fai fai-bridge6';
+            return 'fai fai-bridge6 brigde-icon-adjust-marker';
         },
 
         /***********************************
@@ -625,16 +597,37 @@ window.niels = 0;
         ***********************************/
         markerOptions: function(){
             return {
-                iconClass : this.getIcon(),
+                iconClass    : this.getIcon(),
                 scaleInner   : 180,
                 colorName    : 'white',
                 iconColorName: 'black',
-
-                round     : false,
-                thinBorder: true,
-                noBorder  : false
+                svg          : false,   //<-- No SVG for now
             };
+        },
+
+
+        /***********************************
+        createSVG
+        ***********************************/
+/*
+        createSVG: function(draw, dim, borderColor, backgroundColor, iconColor, marker){
+
+
+            draw
+//                .attr({'shape-rendering': "crispEdges"})
+
+                .polyline([
+                    1,1,
+                    4,5,
+                    8,5,
+                   11,1
+                ])
+                .fill('none')
+                .stroke({ color: 'red', width: 2 })
+
         }
+*/
+
     });
 
 }(jQuery, L, this.i18next, this.moment, this, document));
@@ -782,6 +775,12 @@ Create the differnet L.GeoJSON-layer
         nsMap = ns.map = ns.map || {},
         nsHL = ns.Havnelods = ns.Havnelods || {};
 
+
+    //Add the color-names to the list of colors for markers and polylines
+    L.BsMarker._lbmAddColorName('harbor-dk');
+    L.BsMarker._lbmAddColorName('harbor-gl');
+
+
     /*
     Names for menus:
         Havne og Broer (Danske Havnelods)
@@ -830,7 +829,7 @@ Create the differnet L.GeoJSON-layer
             },
 
             "HAVNELODS-BRIDGES-DK": {
-                icon   : [['brigde_icon_adjust ' + nsHL.Location_Bridges.prototype.getIcon()]],
+                icon   : [['brigde-icon-adjust ' + nsHL.Location_Bridges.prototype.getIcon()]],
                 text   : {da: 'Broer (DK)', en: 'Bridges (DK)'},
                 minZoom: 6,
 

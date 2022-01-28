@@ -7,20 +7,7 @@ location.js,
 
 	window.fcoo = window.fcoo || {};
     var ns = window.fcoo = window.fcoo || {},
-        nsHL = ns.Havnelods = ns.Havnelods || {},
-
-        //Common options for marker
-        bsMarkerOptions = {
-            size     : 'small',
-
-            markerClassName : 'overflow-hidden',
-
-            transparent             : true,
-            hover                   : true,
-            shadowWhenPopupOpen     : true,
-            tooltipHideWhenPopupOpen: true
-        };
-
+        nsHL = ns.Havnelods = ns.Havnelods || {};
 
 //TEST window.plans = [0,0,0];
 //TEST window.photos = [0,0,0];
@@ -138,7 +125,7 @@ location.js,
         getIcon - Is set for each group (DK, GL, Bridge)
         *********************************************/
         getIcon: function(){
-            return L.bsMarkerAsIcon( this.markerOptions() );
+            return [['fas fa-square fa-lbm-color-' + this.colorName, 'far fa-square']];
         },
 
         /*********************************************
@@ -151,15 +138,68 @@ location.js,
         getMarkerOptions
         *********************************************/
         getMarkerOptions: function(){
-            return  $.extend(true, {
-                            tooltip   : this.header,
-                            pane      : this.parent.options.markerPane,
-                            shadowPane: this.parent.options.shadowPane,
-                        },
-                        bsMarkerOptions,
-                        this.markerOptions()
-                    );
+            return  $.extend(true,
+                {
+                    //Common options for marker
+                    size     : 'small',
+
+                    colorName      : (this.getSVGType() == '1') || (this.getSVGType() == '4') ? this.colorName : 'white',
+                    borderColorName: 'black',
+                    iconColorName  : this.colorName,
+
+                    thinBorder       : true,
+                    individualContent: true,
+
+                    transparent             : true,
+                    hover                   : true,
+                    shadowWhenPopupOpen     : true,
+                    tooltipHideWhenPopupOpen: true,
+
+                    svg     : this.createSVG,
+                    _this   : this,
+
+
+                    tooltip   : this.header,
+                    pane      : this.parent.options.markerPane,
+                    shadowPane: this.parent.options.shadowPane,
+                },
+                this.markerOptions()
+            );
         },
+
+        /*********************************************
+        getSVGType
+        Used for harbor-dk and harbor-fl: Return
+        1: Full square
+        2: Inner dot
+        3: Small inner dot
+        4: Full square and inner dot (= 1 and 2)
+        *********************************************/
+        getSVGType: function(){
+            return '1';
+        },
+
+        /*********************************************
+        createSVG
+        *********************************************/
+        createSVG: function(draw, dim, borderColor, backgroundColor, iconColor, marker){
+            var type     = '' + marker.options._this.getSVGType(),
+                dim2     = Math.floor( dim / 2),
+                dim3     = Math.floor( dim / 3),
+                rect_dim = type == '3' ? 1 * dim3 : 2 * dim3;
+
+            draw
+                .attr({'shape-rendering': "crispEdges"})
+                .rect(rect_dim+1, rect_dim+1)
+                    .move(dim2 - rect_dim/2, dim2 - rect_dim/2)
+                    .stroke({
+                        width: 1,
+                        color: type == '1' ? 'none' : 'black'
+                    })
+                    .fill(iconColor);
+        },
+
+
 
         /*****************************************
         _photoPlanUrl
@@ -198,7 +238,7 @@ location.js,
         createMarker: function(){
             var this_show = $.proxy(this.showPdf, this);
 
-            return L.bsMarkerCircle( this.latLng, this.getMarkerOptions() )
+            return L.bsMarkerSimpleSquare( this.latLng, this.getMarkerOptions() )
                         .bindPopup({
 //HER                            flexWidth: true,
                             fixable : true,

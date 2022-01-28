@@ -8,6 +8,11 @@
 
 
 ************************************************/
+
+
+@import "../bower_components/jquery-bootstrap/src/include-jquery-bootstrap-variables";
+
+
 //Super optimizing
 .port_icon_adjust {
     position: relative;
@@ -15,40 +20,13 @@
 }
 
 $scale: 8 / 12;
-.brigde_icon_adjust {
+.brigde-icon-adjust {
     font-size: #{$scale}em;
     width    : #{ 1em / $scale} !important;
     position : relative;
     top      : -1px;
 }
 
-
-
-
-.fa-normal-dot {
-    position: relative;
-    font-size: calc(10em/10);
-    left     : calc(10em/10);
-    top      : calc(10em/10);
+.inner .brigde-icon-adjust-marker {
+    font-size: 0.625rem !important;
 }
-.fa-small-dot {
-    position : relative;
-    font-size: .4em;
-    left     : -.75em;
-    top      : -.5em;
-}
-
-
-.fa-normal-square {
-    position: relative;
-    font-size:  7px;
-    left     : -2.5px;
-    top      : -2px;
-}
-.fa-small-square {
-    position : relative;
-    font-size:  6px;
-    left     : -3px;
-    top      : -2px;
-}
-

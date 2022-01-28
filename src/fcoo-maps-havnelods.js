@@ -16,6 +16,12 @@
         nsMap = ns.map = ns.map || {},
         nsHL = ns.Havnelods = ns.Havnelods || {};
 
+
+    //Add the color-names to the list of colors for markers and polylines
+    L.BsMarker._lbmAddColorName('harbor-dk');
+    L.BsMarker._lbmAddColorName('harbor-gl');
+
+
     /*
     Names for menus:
         Havne og Broer (Danske Havnelods)
@@ -64,7 +70,7 @@
             },
 
             "HAVNELODS-BRIDGES-DK": {
-                icon   : [['brigde_icon_adjust ' + nsHL.Location_Bridges.prototype.getIcon()]],
+                icon   : [['brigde-icon-adjust ' + nsHL.Location_Bridges.prototype.getIcon()]],
                 text   : {da: 'Broer (DK)', en: 'Bridges (DK)'},
                 minZoom: 6,
 

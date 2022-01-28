@@ -2,8 +2,6 @@
 location-DK.js,
 
 ****************************************************************************/
-window.niels = 0;
-
 (function ($, L, i18next, moment, window/*, document, undefined*/) {
 	"use strict";
 
@@ -47,50 +45,19 @@ window.niels = 0;
             };
         },
 
-        /***********************************
-        getIcon
-        ***********************************/
-        getIcon: function(){
-            var type = this.getType(),
-                iconList = ['fal fa-square-full'];
-
-            if (type.isCommertial)
-                iconList.push('fas fa-square-full fa-lbm-color-'+this.colorName);
-
-            if (type.isMarina || type.isNeither)
-                iconList.push(
-                    (type.isCommertial ? 'far fa-square-full fa-lbm-color-white' : 'fas fa-square-full fa-lbm-color-'+this.colorName) +
-                    ' ' +
-                    (type.isNeither ? 'fa-small-square' : 'fa-normal-square')
-                );
-            iconList.push('fal fa-square-full');
-
-            return [iconList];
-        },
-
-        /***********************************
-        markerOptions
-        ***********************************/
-        markerOptions: function(){
+        /*********************************************
+        getSVGType
+        1: Full square
+        2: Inner dot
+        3: Small inner dot
+        4: Full square and inner dot (= 1 and 2)
+        *********************************************/
+        getSVGType: function(){
             var type = this.getType();
-            var options = {
-                    colorName:  type.isCommertial ? this.colorName : 'white',
-                };
-
-            if (type.isMarina || type.isNeither){
-                options.scaleInner     = type.isNeither ? null : 130;
-                options.innerIconClass = type.isBoth ? 'far fa-square-full' : 'fas fa-square-full';
-                options.iconColorName  = type.isBoth ? 'white' : this.colorName;
-            }
-
-            options = $.extend(true, {}, options, {
-                borderColorName : 'black',
-                round           : false,
-                thinBorder      : true,
-                noBorder        : false
-            });
-
-            return options;
+            if (type.isBoth) return '4';
+            if (type.isNeither) return '3';
+            if (type.isMarina) return '2';
+            return '1';
         }
     });
 
