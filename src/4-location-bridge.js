@@ -91,7 +91,7 @@ location-Bridge.js,
         createSVG
         ***********************************/
 /*
-        createSVG: function(draw, dim, borderColor, backgroundColor, iconColor, marker){
+        createSVG: function(svgOptions){
 
 
             draw

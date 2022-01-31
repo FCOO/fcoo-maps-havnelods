@@ -182,13 +182,14 @@ location.js,
         /*********************************************
         createSVG
         *********************************************/
-        createSVG: function(draw, dim, borderColor, backgroundColor, iconColor, marker){
-            var type     = '' + marker.options._this.getSVGType(),
+        createSVG: function(svgOptions){
+            var type     = '' + svgOptions.marker.options._this.getSVGType(),
+                dim      = svgOptions.width,
                 dim2     = Math.floor( dim / 2),
                 dim3     = Math.floor( dim / 3),
                 rect_dim = type == '3' ? 1 * dim3 : 2 * dim3;
 
-            draw
+            svgOptions.draw
                 .attr({'shape-rendering': "crispEdges"})
                 .rect(rect_dim+1, rect_dim+1)
                     .move(dim2 - rect_dim/2, dim2 - rect_dim/2)
@@ -196,7 +197,7 @@ location.js,
                         width: 1,
                         color: type == '1' ? 'none' : 'black'
                     })
-                    .fill(iconColor);
+                    .fill(svgOptions.iconColor);
         },
 
 
