@@ -349,7 +349,7 @@ location.js,
         content_popup: function($body, popup/*,map*/){
             var url = this.photoUrl(0) || this.planUrl(0);
             if (url)
-                $('<img src="' + url + '" style="cursor: pointer; max-width:100%; max-height:100%"/>')
+                $('<img src="' + url + '" style="cursor: pointer; max-width:99%; max-height:99%"/>')
                     .i18n(this.name, 'title')
                     .on('click', function(){
                         popup.$contentNode._bsModalSetSize( $.MODAL_SIZE_EXTENDED );
@@ -369,7 +369,7 @@ location.js,
         content_popup_extended: function($body, popup/*,map*/){
             var url = this.photoUrl(0) || this.planUrl(0);
             if (url)
-                $('<img src="' + url + '" style="cursor: pointer; max-width:100%; max-height:100%"/>')
+                $('<img src="' + url + '" style="cursor: pointer; max-width:99%; max-height:99%"/>')
                     .i18n(this.name, 'title')
                     .on('click', function(){
                         popup.$contentNode._bsModalSetSize( $.MODAL_SIZE_NORMAL );
