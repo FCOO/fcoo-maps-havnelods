@@ -869,9 +869,11 @@ Create the differnet L.GeoJSON-layer
 
         }, mapLayerOptions);
 
-        nsMap.createMapLayer[id] = function(options, addMenu){
+        nsMap.createMapLayer[id] = function(options, addMenu, adjustParentMenuOptions){
             var mapLayer = nsMap._addMapLayer(id, MapLayer_Havnelods, mapLayerOptions );
             addMenu( mapLayer.menuItemOptions() );
+
+            adjustParentMenuOptions({icon: {colorName:'harbor-dk', round: false}});
         };
     });
 
