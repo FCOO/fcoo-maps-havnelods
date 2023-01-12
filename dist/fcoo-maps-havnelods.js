@@ -816,14 +816,14 @@ Create the differnet L.GeoJSON-layer
     var mapLayerId_GeoJSON = {
             "HAVNELODS-HARBORS-DK": {
                 colorId: 'harbor-dk',
-                text   : {da: 'Erhvervs- og Lystbådehavne (DK)', en: 'Commertial Ports and Marinas (DK)'},
+                text   : {da: 'Erhv.- og Lystbådehavne (DK)', en: 'Ports and Marinas (DK)'},
                 minZoom: 6,
                 GeoJSON: L.GeoJSON.Havnelods_DK
             },
 
             "HAVNELODS-HARBORS-GL": {
                 colorId: 'harbor-gl',
-                text   : {da: 'Byer, Bygder og Stationer (GL)', en: 'Towns, Hamlets, and Stations (GL)'},
+                text   : {da: 'Byer, Bygder og Stationer (GL)', en: 'Towns, Hamlets, and Stn. (GL)'},
                 minZoom: 3,
 
                 GeoJSON: L.GeoJSON.Havnelods_GL
