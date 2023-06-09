@@ -1,6 +1,6 @@
 {
   "name": "fcoo-maps-havnelods",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "homepage": "https://github.com/FCOO/fcoo-maps-havnelods",
   "authors": [
     "Niels Holt"
@@ -15,7 +15,8 @@
     "url": "git://github.com/FCOO/fcoo-maps-havnelods.git"
   },
   "dependencies": {
-    "fcoo-maps": "fcoo/fcoo-maps#latest"
+    "fcoo-maps": "fcoo/fcoo-maps#latest",
+    "fcoo-havnelods": "fcoo/fcoo-havnelods#latest"
   },
   "devDependencies": {},
   "license": "MIT",

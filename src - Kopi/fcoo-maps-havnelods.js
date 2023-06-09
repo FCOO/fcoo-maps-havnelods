@@ -78,7 +78,9 @@
             }
         };
 
-        var havnelodsButtonList = null; //MANGLER [{icon: 'fa-list', text: {da:'Listen', en:'The List'}, onClick: function(){ console.log('The List'); } }];
+
+//MANGLER    var havnelodsButtonList = [{icon: 'fa-list', text: {da:'Listen', en:'The List'}, onClick: function(){ console.log('The List'); } }];
+
 
     /***********************************************************
     MapLayer_Havnelods
@@ -96,28 +98,26 @@
     /***********************************************************
     Add all versions of MapLayer_Havnelods to createMapLayer
     ***********************************************************/
-    function location_onClickPosition( location ){
-        if (location.latLng)
-            location.latLng.asModal({header: location.header});
-    }
-
     $.each(mapLayerId_GeoJSON, function(id, mapLayerOptions){
+
         mapLayerOptions = $.extend(true, {
-            icon            : L.bsMarkerAsIcon(mapLayerOptions.colorId, 'black', false),
-            minZoom         : 6,
+            icon    : L.bsMarkerAsIcon(mapLayerOptions.colorId, 'black', false),
+            minZoom : 6,
             createMarkerPane: true,
-            layerOptions    :{
-                onClickPosition: location_onClickPosition
-            },
-            buttonList: havnelodsButtonList
+
+//MANGLER buttonList: havnelodsButtonList,
+
         }, mapLayerOptions);
 
         nsMap.createMapLayer[id] = function(options, addMenu, adjustParentMenuOptions){
             var mapLayer = nsMap._addMapLayer(id, MapLayer_Havnelods, mapLayerOptions );
             addMenu( mapLayer.menuItemOptions() );
+
             adjustParentMenuOptions({icon: {colorName:'harbor-dk', round: false}});
         };
     });
+
+
 
 }(jQuery, L, this, document));
 

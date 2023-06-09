@@ -10,7 +10,7 @@
     <meta name='owner' content='FCOO'>
 
   <link  href="bower_components.css" rel="stylesheet">    
-  <link  href="../src/fcoo-maps-havnelods.css" rel="stylesheet">    
+  <!-- <link  href="../src/fcoo-maps-havnelods.css" rel="stylesheet">     -->
 </head>
 
 <body>
@@ -21,12 +21,6 @@
     </script>
 
     <script src="bower_components.js"></script>
-    <script src="../src/0-facilities.js"></script>
-    <script src="../src/1-location.js"></script>
-    <script src="../src/2-location-dk.js"></script>
-    <script src="../src/3-location-gl.js"></script>
-    <script src="../src/4-location-bridge.js"></script>
-    <script src="../src/5-GeoJSON.js"></script>
     <script src="../src/fcoo-maps-havnelods.js"></script>
 
     <script>
@@ -40,23 +34,16 @@
             //layerMenu
             {
 
-                "HAVNELODS_MENU":
-                    { text: {da: "??? Byer, havne mv.", en: "??? Cities, Ports, Harbors etc."},
-                      text_alt: {da: "NAVN MANGLER: Byer, Havne, Broer mv.", en: "NAME MISSING: Cities, Ports, Harbors, Bridges etc."}, list:[
-                    "HAVNELODS-HARBORS-DK",
-                    "HAVNELODS-HARBORS-GL",
-                    "HAVNELODS-BRIDGES-DK"
-                ]},
-
+                "HAVNELODS_MENU": { 
+                    text: {da: "Byer, Havne og Broer", en: "Cities, Harbors and Bridges"},
+                    list:[
+                        "HAVNELODS-HARBORS-DK",
+                        "HAVNELODS-HARBORS-GL",
+                        "HAVNELODS-BRIDGES-DK"
+                    ]
+                }   
             }
         );
-
-        
-
-
-
-
-
 
     </script>
 </body>
