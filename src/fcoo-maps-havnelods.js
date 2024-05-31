@@ -157,9 +157,9 @@
             buttonList: havnelodsButtonList(id)
         }, mapLayerOptions);
 
-        nsMap.createMapLayer[id] = function(options, addMenu, adjustParentMenuOptions){
+        nsMap.createMapLayer[id] = function(options, addMenu/*, adjustParentMenuOptions*/){
             var mapLayer = nsMap._addMapLayer(id, MapLayer_Havnelods, mapLayerOptions );
-            adjustParentMenuOptions({icon: {colorName:'harbor-dk', round: false}});
+//HER               adjustParentMenuOptions({icon: {colorName:'harbor-dk', round: false}});
 
             addMenu([
                 mapLayer.menuItemOptions(),
