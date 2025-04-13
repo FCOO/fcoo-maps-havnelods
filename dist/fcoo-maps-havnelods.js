@@ -23,7 +23,7 @@
 
     //Update options for Havnelods
     nsHLOptions.smallTableWithAllLocations = ns.modernizrDevice.isPhone;
-    nsHLOptions.isExtended                 = ns.modernizrDevice.isDesktop || ns.modernizrDevice.isTablet;
+    nsHLOptions.modalIsExtended            = ns.modernizrDevice.isDesktop || ns.modernizrDevice.isTablet;
 
     //Icon for filter rest-button = gray filter with cross over
     nsHLOptions.resetFilterIcon = [['fal text-secondary fa-filter', 'fa-times']];
@@ -75,49 +75,65 @@
 
     var mapLayer_id_options = {
             "HAVNELODS-HARBORS-DK": {
-                colorId     : 'harbor-dk',
-                text        : {da: 'Erhv.- og Lystbådehavne (DK)', en: 'Ports and Marinas (DK)'},
-                minZoom     : 5,
-                constructor : nsHL.Havnelods_DK
+                colorId         : 'harbor-dk',
+                text            : {da: 'Erhv.- og Lystbådehavne (DK)', en: 'Ports and Marinas (DK)'},
+                externalUrl     : 'https://www.danskehavnelods.dk',                    
+                minZoom         : 5,
+                constructor     : nsHL.Havnelods_DK,
+                getLocationGroup: nsHL.getHavnelods_DK                
             },
 
             "HAVNELODS-HARBORS-GL": {
-                colorId     : 'harbor-gl',
-                text        : {da: 'Byer, Bygder og Stationer (GL)', en: 'Towns, Hamlets, and Stn. (GL)'},
-                minZoom     : 3,
-                constructor : nsHL.Havnelods_GL
+                colorId         : 'harbor-gl',
+                text            : {da: 'Byer, Bygder og Stationer (GL)', en: 'Towns, Hamlets, and Stn. (GL)'},
+                externalUrl     : 'https://www.gronlandskehavnelods.dk',                    
+                minZoom         : 3,
+                constructor     : nsHL.Havnelods_GL,
+                getLocationGroup: nsHL.getHavnelods_GL                
             },
 
             "HAVNELODS-BRIDGES-DK": {
-                icon        : [['brigde-icon-adjust ' + nsHL.Location_Bridges.prototype.getIcon()]],
-                text        : {da: 'Broer (DK)', en: 'Bridges (DK)'},
-                minZoom     : 6,
-                constructor : nsHL.Havnelods_Bridges
+                icon            : [['brigde-icon-adjust ' + nsHL.Location_Bridges.prototype.getIcon()]],
+                text            : {da: 'Broer (DK)', en: 'Bridges (DK)'},
+                externalUrl     : 'https://www.danskehavnelods.dk',                    
+                minZoom         : 6,
+                constructor     : nsHL.Havnelods_Bridges,
+                getLocationGroup: nsHL.getHavnelods_Bridges                
             }
         };
 
-//        var havnelodsButtonList = null; //MANGLER [{icon: 'fa-list', text: {da:'Listen', en:'The List'}, onClick: function(){ console.log('The List'); } }];
-        //var havnelodsButtonList = [{icon: 'fa-list', text: {da:'Listen', en:'The List'}, onClick: function(){ console.log('The List'); } }];
     function havnelodsButtonList(mapLayerId){
         return [{
             icon   : 'fa-th-list',
             text   : {da:'Vis alle', en:'Show all'},
             onClick: function(/*id, selected, $button, map, owner*/){
-                var locationGroup = nsMap.getMapLayer(mapLayerId).locationGroup;
-                locationGroup.asModal.apply(locationGroup, arguments);
+                let mapLayer      = nsMap.getMapLayer(mapLayerId),
+                    locationGroup = mapLayer.locationGroup,
+                    arg           = arguments;
+
+                if (locationGroup)
+                    locationGroup.asModal.apply(locationGroup, arguments);
+                else
+                    mapLayer.options.getLocationGroup( function( locationGroup ){ 
+                        mapLayer.locationGroup = mapLayer.locationGroup || locationGroup;
+                        locationGroup.mapLayer = mapLayer;
+                        locationGroup.asModal.apply(locationGroup, arg);
+                    });    
             }
          },{
             icon   : 'far fa-link',
             text   : ['abbr:gst', {da: ' version', en:' Version'}],
             onClick: function(){
-                var locationList = nsMap.getMapLayer(mapLayerId).locationGroup.list,
-                    location     = locationList && locationList.length ? locationList[0] : null,
-                    externalUrl  = location.setup.externalUrl;
-                externalUrl = externalUrl.split('/');
-                externalUrl.splice(-1);
-                externalUrl = externalUrl.join('/');
-
-                window.open( externalUrl );
+                function openGSTVersion(locationGroup){
+                    window.open( locationGroup.mapLayer.options.externalUrl );
+                }
+                
+                let mapLayer = nsMap.getMapLayer(mapLayerId),
+                    locationGroup = mapLayer.locationGroup;
+                if (locationGroup)
+                    openGSTVersion(locationGroup);
+                else
+                    mapLayer.options.getLocationGroup( openGSTVersion );                    
             }
         }];
     }
@@ -154,22 +170,18 @@
             layerOptions    :{
                 onClickPosition: location_onClickPosition
             },
-            buttonList: havnelodsButtonList(id)
+            buttonList: havnelodsButtonList(id),
+            menuOptions: {
+                useLegendButtonList: true,
+                showAllways        : true    
+            }                    
         }, mapLayerOptions);
 
         nsMap.createMapLayer[id] = function(options, addMenu/*, adjustParentMenuOptions*/){
             var mapLayer = nsMap._addMapLayer(id, MapLayer_Havnelods, mapLayerOptions );
-//HER               adjustParentMenuOptions({icon: {colorName:'harbor-dk', round: false}});
-
-            addMenu([
-                mapLayer.menuItemOptions(),
-                {type: 'buttons', buttonPaddingLeft: true, buttonPaddingRight: true, buttonList: havnelodsButtonList(id)}
-            ]);
-
+            addMenu(mapLayer.menuItemOptions());
         };
     });
 
 }(jQuery, L, this, document));
-
-
 
