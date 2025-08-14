@@ -9,7 +9,7 @@
     <meta name='copyright' content='FCOO'>
     <meta name='owner' content='FCOO'>
 
-  <link  href="bower_components.css" rel="stylesheet">    
+  <link  href="bower_components.css" rel="stylesheet">
   <!-- <link  href="../src/fcoo-maps-havnelods.css" rel="stylesheet">     -->
 </head>
 
@@ -30,14 +30,19 @@
         window.fcoo.map.createApplication(
             //options
             {
-                applicationName: {da:'DA: fcoo-maps-havnelods', en:'EN: fcoo-maps-havnelods'},
-                leftMenu       : {isLayerMenu: true, width: 359},
+                applicationName : {da:'DA: fcoo-maps-havnelods', en:'EN: fcoo-maps-havnelods'},
+                leftMenu        : {isLayerMenu: true, width: 359},
+                menuOptions     : {
+                    keepAll  : true,
+                    favorites: true,
+                }
+
             },
 
             //layerMenu
             {
 
-                "HAVNELODS_MENU": { 
+                "HAVNELODS_MENU": {
                     icon: {colorClassName: "fa-harbor-dk"},
                     text: {da: "Byer, Havne og Broer", en: "Cities, Harbors and Bridges"},
                     list:[
@@ -45,7 +50,7 @@
                         "HAVNELODS-HARBORS-GL",
                         "HAVNELODS-BRIDGES-DK"
                     ]
-                }   
+                }
             }
         );
 

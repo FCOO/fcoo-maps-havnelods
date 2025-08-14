@@ -14,6 +14,7 @@
 	window.fcoo = window.fcoo || {};
     var ns = window.fcoo = window.fcoo || {},
         nsMap = ns.map = ns.map || {},
+        nsCountry = ns.country = ns.country || {},
         nsHL = ns.Havnelods = ns.Havnelods || {},
         nsHLOptions = nsHL.options;
 
@@ -73,34 +74,31 @@
     //createMapLayer = {MAPLAYER_ID: CREATE_MAPLAYER_AND_MENU_FUNCTION} See fcoo-maps/src/map-layer_00.js for description
     nsMap.createMapLayer = nsMap.createMapLayer || {};
 
-    var mapLayer_id_options = {
-            "HAVNELODS-HARBORS-DK": {
-                colorId         : 'harbor-dk',
-                text            : {da: 'Erhv.- og Lystbådehavne (DK)', en: 'Ports and Marinas (DK)'},
-                externalUrl     : 'https://www.danskehavnelods.dk',                    
-                minZoom         : 5,
-                constructor     : nsHL.Havnelods_DK,
-                getLocationGroup: nsHL.getHavnelods_DK                
-            },
-
-            "HAVNELODS-HARBORS-GL": {
-                colorId         : 'harbor-gl',
-                text            : {da: 'Byer, Bygder og Stationer (GL)', en: 'Towns, Hamlets, and Stn. (GL)'},
-                externalUrl     : 'https://www.gronlandskehavnelods.dk',                    
-                minZoom         : 3,
-                constructor     : nsHL.Havnelods_GL,
-                getLocationGroup: nsHL.getHavnelods_GL                
-            },
-
-            "HAVNELODS-BRIDGES-DK": {
-                icon            : [['brigde-icon-adjust ' + nsHL.Location_Bridges.prototype.getIcon()]],
-                text            : {da: 'Broer (DK)', en: 'Bridges (DK)'},
-                externalUrl     : 'https://www.danskehavnelods.dk',                    
-                minZoom         : 6,
-                constructor     : nsHL.Havnelods_Bridges,
-                getLocationGroup: nsHL.getHavnelods_Bridges                
-            }
-        };
+    let mapLayer_id_options = [{
+            id              : "HAVNELODS-HARBORS-DK",
+            colorId         : 'harbor-dk',
+            text            : {da: 'Erhv.- og Lystbådehavne (DK)', en: 'Ports and Marinas (DK)'},
+            externalUrl     : 'https://www.danskehavnelods.dk',
+            minZoom         : 5,
+            constructor     : nsHL.Havnelods_DK,
+            getLocationGroup: nsHL.getHavnelods_DK
+        },{
+            id              : "HAVNELODS-HARBORS-GL",
+            colorId         : 'harbor-gl',
+            text            : {da: 'Byer, Bygder og Stationer (GL)', en: 'Towns, Hamlets, and Stn. (GL)'},
+            externalUrl     : 'https://www.gronlandskehavnelods.dk',
+            minZoom         : 3,
+            constructor     : nsHL.Havnelods_GL,
+            getLocationGroup: nsHL.getHavnelods_GL
+        },{
+            id              : "HAVNELODS-BRIDGES-DK",
+            icon            : [['brigde-icon-adjust ' + nsHL.Location_Bridges.prototype.getIcon()]],
+            text            : {da: 'Broer (DK)', en: 'Bridges (DK)'},
+            externalUrl     : 'https://www.danskehavnelods.dk',
+            minZoom         : 6,
+            constructor     : nsHL.Havnelods_Bridges,
+            getLocationGroup: nsHL.getHavnelods_Bridges
+    }];
 
     function havnelodsButtonList(mapLayerId){
         return [{
@@ -114,26 +112,26 @@
                 if (locationGroup)
                     locationGroup.asModal.apply(locationGroup, arguments);
                 else
-                    mapLayer.options.getLocationGroup( function( locationGroup ){ 
+                    mapLayer.options.getLocationGroup( function( locationGroup ){
                         mapLayer.locationGroup = mapLayer.locationGroup || locationGroup;
                         locationGroup.mapLayer = mapLayer;
                         locationGroup.asModal.apply(locationGroup, arg);
-                    });    
+                    });
             }
          },{
-            icon   : 'far fa-link',
+            icon   : $.bsExternalLinkIcon,
             text   : ['abbr:gst', {da: ' version', en:' Version'}],
             onClick: function(){
                 function openGSTVersion(locationGroup){
                     window.open( locationGroup.mapLayer.options.externalUrl );
                 }
-                
+
                 let mapLayer = nsMap.getMapLayer(mapLayerId),
                     locationGroup = mapLayer.locationGroup;
                 if (locationGroup)
                     openGSTVersion(locationGroup);
                 else
-                    mapLayer.options.getLocationGroup( openGSTVersion );                    
+                    mapLayer.options.getLocationGroup( openGSTVersion );
             }
         }];
     }
@@ -162,7 +160,15 @@
             location.latLng.asModal({header: location.header});
     }
 
-    $.each(mapLayer_id_options, function(id, mapLayerOptions){
+    let other_menuItem = nsCountry.addMenuLinkList({
+            subDir  : 'havnelods',
+            fileName: 'country_list_havnelods.json'
+        },{
+            inclFavoriteLinkIcon: true,
+            favoritePrefix      : {da:'Havne -', en:'Ports -'}
+        });
+
+    mapLayer_id_options.forEach( (mapLayerOptions, index) => {
         mapLayerOptions = $.extend(true, {
             icon            : L.bsMarkerAsIcon(mapLayerOptions.colorId, 'black', false),
             minZoom         : 6,
@@ -170,16 +176,20 @@
             layerOptions    :{
                 onClickPosition: location_onClickPosition
             },
-            buttonList: havnelodsButtonList(id),
+            buttonList: havnelodsButtonList(mapLayerOptions.id),
             menuOptions: {
                 useLegendButtonList: true,
-                showAllways        : true    
-            }                    
+                showAllways        : true
+            }
         }, mapLayerOptions);
 
-        nsMap.createMapLayer[id] = function(options, addMenu/*, adjustParentMenuOptions*/){
-            var mapLayer = nsMap._addMapLayer(id, MapLayer_Havnelods, mapLayerOptions );
-            addMenu(mapLayer.menuItemOptions());
+
+        nsMap.createMapLayer[mapLayerOptions.id] = function(options, addMenu/*, adjustParentMenuOptions*/){
+            let mapLayer = nsMap._addMapLayer(mapLayerOptions.id, MapLayer_Havnelods, mapLayerOptions );
+            let menuList = [mapLayer.menuItemOptions() ];
+            if (index == (mapLayer_id_options.length-1))
+                menuList.push( other_menuItem );
+            addMenu(menuList);
         };
     });
 
